@@ -5,6 +5,7 @@
     "author": "Synyster#6666",
     "main": "client.js",
     "dependencies": {
+        "discord-rpc": "github:discordjs/RPC",
         "discord.js": "^12.5.1",
         "fetch": "^1.1.0",
         "lexure": "^0.17.0",
