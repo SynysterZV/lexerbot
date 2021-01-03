@@ -1,0 +1,14 @@
+{
+    "name": "lexerbot",
+    "version": "1.0.0",
+    "description": "LexerBot",
+    "author": "Synyster#6666",
+    "main": "client.js",
+    "dependencies": {
+        "discord.js": "^12.5.1",
+        "fetch": "^1.1.0",
+        "lexure": "^0.17.0",
+        "node-fetch": "^2.6.1",
+        "querystring": "^0.2.0"
+    }
+}
