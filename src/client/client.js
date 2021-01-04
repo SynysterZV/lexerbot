@@ -1,4 +1,5 @@
-const { Client, Collection } = require('discord.js');
+const { Client, Collection, Structures } = require('discord.js');
+const DiscordRPC = require('discord-rpc')
 const fs = require('fs')
 module.exports = class extends Client {
     constructor(config) {
@@ -7,6 +8,7 @@ module.exports = class extends Client {
             partials: ['GUILD_MEMBER', 'MESSAGE']
         });
         this.commands = new Collection();
+        this.interactions = new Collection();
         this.config = config
         this.lex = require('./messageHandler');
         this.constants = require('./constants')
@@ -38,5 +40,30 @@ module.exports = class extends Client {
                 this.on(eventName, event.bind(null, this));
             })
         })
+
+        fs.readdir('./interactions', (err, files) => {
+            if (err) throw err;
+            files.forEach(f => {
+                const int = require(`../interactions/${f}`)
+                this.interactions.set(f.split('.')[0], int)
+            })
+        })
+
+        this.ws.on('INTERACTION_CREATE', interaction => {
+            const intname = interaction.data.name;
+            const int = this.interactions.get(intname)
+        
+            int(this, interaction)
+        })
     }
+
+    
+    
 }
+
+Structures.extend('GuildMember', C => class extends C {
+    constructor(client, data, guild) {
+        super(client, data, guild)
+        this.pending = data.pending ?? false
+    }
+})

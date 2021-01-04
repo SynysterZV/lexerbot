@@ -11,7 +11,6 @@ module.exports = {
         role: false
     },
     async execute(message, args) {
-        message.delete()
         let embed = new MessageEmbed()
         let d = args.single(); let input = d ? d.toLowerCase() : undefined
 
@@ -60,6 +59,6 @@ module.exports = {
                 { name: 'Aliases:', value: command.help.aliases.length ? command.help.aliases : 'None' }
             )
         } 
-        message.channel.send(embed).then(m => setTimeout(() => {m.delete()}, 15000));
+        return message.client.emit('reactDelete', (await message.channel.send(embed)), message.author);
     }
 }

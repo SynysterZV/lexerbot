@@ -30,6 +30,7 @@ module.exports = {
         if(!embed) {
             message.channel.send('No Results!')
         }
-        message.channel.send({embed})
+        return message.client.emit('reactDelete', (await message.channel.send({embed})), message.author)
+
     }
 }

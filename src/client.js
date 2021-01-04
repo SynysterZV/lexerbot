@@ -22,7 +22,7 @@ async function setActivity() {
     state: 'but ill do.',
     largeImageKey: 'snek_small',
     largeImageText: 'BOII',
-    buttons: [{ label: 'Invite Me!', url: 'https://synyster.org'}, { label: 'Join my server!', url: 'http://gg.synyster.org'}],
+    buttons: [{ label: 'Invite Me!', url: 'https://synyster.page.link/Eit5'}, { label: 'Join my server!', url: 'http://gg.synyster.org'}],
     instance: false,
   });
 }
