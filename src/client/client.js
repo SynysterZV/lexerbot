@@ -5,8 +5,10 @@ module.exports = class extends Client {
     constructor(config) {
         super({
             disableMentions: 'everyone',
-            partials: ['GUILD_MEMBER', 'MESSAGE']
+            partials: ['GUILD_MEMBER', 'MESSAGE'],
+            presence: config.presence
         });
+
         this.commands = new Collection();
         this.interactions = new Collection();
         this.config = config
@@ -60,10 +62,3 @@ module.exports = class extends Client {
     
     
 }
-
-Structures.extend('GuildMember', C => class extends C {
-    constructor(client, data, guild) {
-        super(client, data, guild)
-        this.pending = data.pending ?? false
-    }
-})

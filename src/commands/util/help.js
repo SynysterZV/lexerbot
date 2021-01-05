@@ -25,7 +25,7 @@ module.exports = {
         embed.setFooter(message.guild, message.guild.iconURL())
         embed.setTimestamp()
         embed.addFields(
-            {name: 'Categories', value: `•Admin\n•Util\n\nI.E. \`${message.client.config.prefix}help {category}\``}
+            {name: 'Categories', value: `•Admin\n•Util\n•Mod\n\nI.E. \`${message.client.config.prefix}help {category}\``}
         )
         } else if(categories.includes(input)) {
             const multiple = 10

@@ -9,6 +9,7 @@
         "discord.js": "^12.5.1",
         "fetch": "^1.1.0",
         "lexure": "^0.17.0",
+        "milliparsec": "^1.0.4",
         "moment": "^2.29.1",
         "node-fetch": "^2.6.1",
         "querystring": "^0.2.0",

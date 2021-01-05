@@ -1,4 +1,11 @@
 {
     "token": "Token Goes Here",
-    "prefix": "."
+    "prefix": ".",
+    "presence": {
+        "activity": {
+            "type": "PLAYING",
+            "name": "with code"
+        },
+        "status": "dnd"
+    }
 }
