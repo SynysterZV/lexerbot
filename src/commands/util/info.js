@@ -40,6 +40,6 @@ module.exports = {
             .setTimestamp()
             .setThumbnail(message.client.user.displayAvatarURL({ dynamic: true, size: 512}))
 
-            message.client.emit('reactDelete', (await message.channel.send(embed)), message.author)
+            return (await message.channel.send(embed)).reactDelete(message.author)
     }
 }

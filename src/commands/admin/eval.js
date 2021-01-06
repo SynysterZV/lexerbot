@@ -16,9 +16,10 @@ module.exports = {
     },
     config: {
         perms: [],
-        role: 'Owner'
+        role: false
     },
     async execute(message, args) {
+        if(message.author.id !== '372516983129767938') return;
         let evaled
 
         const c = args.save()

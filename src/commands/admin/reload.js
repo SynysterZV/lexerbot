@@ -7,7 +7,7 @@ module.exports = {
         category: 'admin'
     },
     config: {
-        perms: ['ADMINISTRATOR'],
+        perms: ['MANAGE_GUILD'],
         role: false
     },
     execute(message, args) {

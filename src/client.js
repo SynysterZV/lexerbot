@@ -1,6 +1,5 @@
-const LexerClient = require('./client/client')
-const client = new LexerClient(require('./client/config.json'));
-const fetch = require('node-fetch')
+const LexureClient = require('./structures')
+const client = new LexureClient(require('./client/config.json'));
 
 
 process.on('unhandledRejection', e => {
