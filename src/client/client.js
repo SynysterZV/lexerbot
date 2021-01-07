@@ -1,4 +1,4 @@
-const { Client, Collection } = require('discord.js');
+const { Client, Collection, MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const lexure = require('lexure')
 module.exports = class extends Client {
@@ -6,7 +6,10 @@ module.exports = class extends Client {
         super({
             disableMentions: 'everyone',
             partials: ['GUILD_MEMBER', 'MESSAGE'],
-            presence: config.presence
+            presence: config.presence,
+            http: {
+                version: 8
+            }
         });
 
 
@@ -59,11 +62,19 @@ module.exports = class extends Client {
             int(this, interaction)
         })
 
-        this.lex = (message) => {
+        this.lex = async (message) => {
                 // LEXER
             const lexer = new lexure.Lexer(message.content)
             const res = lexer.lexCommand(s => s.startsWith(message.client.config.prefix) ? 1 : null)
-            if (res == null) return;
+            if (res == null) {
+                if(message.channel.type != 'dm' || message.author.bot) return
+                const embed = new MessageEmbed()
+                    .setAuthor(message.author.tag, message.author.displayAvatarURL())
+                    .setTitle('DM')
+                    .setDescription(message.content)
+                    .setTimestamp()
+                return (await message.client.fetchApplication()).owner.send(embed).catch(e => {})
+            }
             const cmd = message.client.commands.get(res[0].value)
                 || message.client.commands.find(a => a.help.aliases && a.help.aliases.includes(res[0].value))
             if(!cmd) return;
