@@ -6,6 +6,8 @@ const clean = text => {
   }
 
 const { joinTokens } = require('lexure');
+const request = require('request-promise')
+const tr = require('googletrans').default
 
 module.exports = {
     help: {
