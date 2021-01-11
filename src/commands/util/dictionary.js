@@ -30,8 +30,7 @@ module.exports = {
 
     if(!l.changed) return message.reply('That language either doesnt exist or is not supported!')
 
-        const query = args.single()
-        const uri = encodeURI(`https://api.dictionaryapi.dev/api/v2/entries/${l.lang}/${query}`)
+        const uri = encodeURI(`https://api.dictionaryapi.dev/api/v2/entries/${l.lang}/${args.single()}`)
         const res = await fetch(uri).then(res => res.json())
         if(!res[0]?.word) return message.channel.send('We couldnt find that word!')
 
