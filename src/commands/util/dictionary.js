@@ -1,5 +1,10 @@
-const { search } = require('google-dictionary-api')
+const fetch = require('node-fetch')
 const { MessageEmbed } = require('discord.js')
+const tr = require('googletrans').default
+
+const toUp = (word) => {
+    return word.charAt(0).toUpperCase() + word.slice(1)
+}
 
 module.exports = {
     help: {
@@ -13,40 +18,36 @@ module.exports = {
         role: false
     },
     async execute(message, args) {
-        const t = args.option('type', 't');
-        const u = args.flag('u')
+        const { LANGS } = message.client.constants
+        let l = args.option('lang', 'l') || 'en'
 
-        let res = (await search(args.single(), 'en').catch(() => false))[0]
-        if(!res) return message.reply('Im sorry, but I couldnt find the word you were looking for.')
-        const { word } = res
-
-        if(u) {
-            const embed = new MessageEmbed()
-                .setTitle('Word Types:')
-                .setDescription(Object.keys(res.meaning).map(s=>s).join('\n'))
-
-            return message.channel.send(embed)
+        for(const lang of LANGS) {
+            const item = Object.values(lang).map(v => v.toLowerCase())
+            if(item.includes(l)) {
+                l = { lang: lang.code, changed: true }
         }
+    }
 
-        if(t) {
-            if(!res.meaning[t]) return message.reply(`The word ${word} cannot be used as a(n) ${t}`)
-        }
+    if(!l.changed) return message.reply('That language either doesnt exist or is not supported!')
 
-        const ent =  Object.keys(res.meaning)[0]
-        res = res.meaning[t] ? res.meaning[t][0] : res.meaning[ent][0]
+        const query = args.single()
+        const uri = encodeURI(`https://api.dictionaryapi.dev/api/v2/entries/${l.lang}/${query}`)
+        const res = await fetch(uri).then(res => res.json())
+        if(!res[0]?.word) return message.channel.send('We couldnt find that word!')
+
+        const gd = await tr('Google Dictionary', { to: l.lang, from: 'en'});
 
         const embed = new MessageEmbed()
-            .setAuthor(message.author.tag, message.author.displayAvatarURL())
-            .setDescription(`**${word}**\n${res.definition}`)
-            .addField('Type:', t || ent)
+            .setAuthor(`${gd.text} - ${toUp(res[0].word)}`, 'https://cdn4.iconfinder.com/data/icons/social-media-and-logos-11/32/Logo_Google-512.png')
 
-        if(res.example) {
-            embed.addField('Example:', res.example)
-        }
 
-        if(res.synonyms) {
-            embed.addField('Synonyms:', res.synonyms.splice(0,5).map(m => m.toLowerCase()))
+        for(const i of res[0].meanings) {
+            embed.addField(`\u200b`, `» **__${toUp(i.partOfSpeech)}__**`)
+            const defs = i.definitions.splice(0,2)
+            for(const def of defs) {
+                embed.addField(`- ${def.definition}`, `Example: *${def.example || 'None'}*`)
         }
+    }
 
         message.channel.send(embed)
     }

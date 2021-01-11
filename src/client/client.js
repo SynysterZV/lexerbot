@@ -65,6 +65,10 @@ module.exports = class extends Client {
         this.lex = async (message) => {
                 // LEXER
             const lexer = new lexure.Lexer(message.content)
+                .setQuotes([
+                    ["'", "'"],
+                    ['"', '"']
+                ]);
             const res = lexer.lexCommand(s => s.startsWith(this.config.prefix) ? 1 : null)
             if (res == null) {
                 if(message.channel.type != 'dm' || message.author.bot) return
