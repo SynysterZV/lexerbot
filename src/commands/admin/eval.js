@@ -14,7 +14,8 @@ module.exports = {
         name: 'eval',
         desc: 'Evaluate a command',
         aliases: [],
-        category: 'admin'
+        category: 'admin',
+        usage: '{ code }'
     },
     config: {
         perms: [],

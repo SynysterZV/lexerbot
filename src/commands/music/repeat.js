@@ -3,7 +3,8 @@ module.exports = {
         name: 'repeat',
         desc: 'Sets Repeat mode',
         aliases: [],
-        category: 'music'
+        category: 'music',
+        usage: '{ queue | none for track }'
     },
     config: {
         perms: [],

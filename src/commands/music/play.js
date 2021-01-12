@@ -5,7 +5,8 @@ module.exports = {
         name: 'play',
         desc: 'Plays music',
         aliases: ['p'],
-        category: 'music'
+        category: 'music',
+        usage: '{ URL | Song name }'
     },
     config: {
         perms: [],

@@ -98,15 +98,27 @@ module.exports = class extends Client {
                     ["'", "'"],
                     ['"', '"']
                 ]);
-            const res = lexer.lexCommand(s => s.startsWith(this.config.prefix) ? 1 : null)
+            const regx = new RegExp(`^<@!?${this.user.id}>`);
+            const res = lexer.lexCommand(s => regx.test(s) ? 22 : s.startsWith(';') ? 1 : null)
             if (res == null) {
-                if(message.channel.type != 'dm' || message.author.bot) return
+                if(message.author.bot) return
+
+
+                if(message.channel.type === 'dm') {
                 const embed = new MessageEmbed()
                     .setAuthor(message.author.tag, message.author.displayAvatarURL())
                     .setTitle('DM')
                     .setDescription(message.content)
                     .setTimestamp()
                 return (await message.client.fetchApplication()).owner.send(embed).catch(e => {})
+                }
+                if(regx.test(message.cotent) || message.content.startsWith(';')) {
+                const embed = new MessageEmbed()
+                .setAuthor(this.user.tag, this.user.displayAvatarURL())
+                .setDescription('You can use `;help` to view a list of my commands!')
+                return message.channel.send(embed)
+                }
+                return;
             }
 
             const cmd = message.client.commands.get(res[0].value)
@@ -121,6 +133,7 @@ module.exports = class extends Client {
             //PERMISSIONS HANDLER
             if(cmd.config.perms && !message.member.permissions.has(cmd.config.perms)) return message.channel.send('You dont have the permissions to use this command!');
             if (cmd.config.role && !message.member.roles.cache.some(role => role.name === cmd.config.role)) return message.channel.send('You dont have the role to use this command!')
+            message.delete();
             return {cmd, args}
         }
 

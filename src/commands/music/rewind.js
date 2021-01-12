@@ -5,7 +5,8 @@ module.exports = {
         name: 'rewind',
         desc: 'rewinds a song',
         aliases: ['rw'],
-        category: 'music'
+        category: 'music',
+        usage: '{ Seconds }'
     },
     config: {
         perms: [],

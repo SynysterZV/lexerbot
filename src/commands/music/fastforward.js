@@ -5,7 +5,8 @@ module.exports = {
         name: 'fastforward',
         desc: 'Moves a song forward X amount of seconds',
         aliases: ['ff'],
-        category: 'music'
+        category: 'music',
+        usage: '{ Seconds }'
     },
     config: {
         perms: [],

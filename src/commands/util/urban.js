@@ -7,7 +7,8 @@ module.exports = {
         name: 'urban',
         desc: 'Urban Dicitonary Lookup',
         aliases: ['u'],
-        category: 'util'
+        category: 'util',
+        usage: '{ search query | none for random }'
     },
     config: {
         perms: [],

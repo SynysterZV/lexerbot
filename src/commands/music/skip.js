@@ -4,7 +4,8 @@ module.exports = {
         name: 'skip',
         desc: 'Skips current song, a song from the queue, or a range of songs',
         aliases: ['s'],
-        category: 'music'
+        category: 'music',
+        usage: '{ None | Queue # | Queue Range}'
     },
     config: {
         perms: [],

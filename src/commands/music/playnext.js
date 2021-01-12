@@ -5,7 +5,8 @@ module.exports = {
     name: 'playnext',
     desc: 'Plays a certain song next',
     aliases: ['px'],
-    category: 'music'
+    category: 'music',
+    usage: '{ Song | Position in Queue }'
 },
 config: {
     perms: [],

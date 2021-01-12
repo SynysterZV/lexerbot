@@ -7,7 +7,8 @@ module.exports = {
         name: 'npm',
         desc: 'npm',
         aliases: [],
-        category: 'util'
+        category: 'util',
+        usage: '{ package name }'
     },
     config: {
         perms: [],

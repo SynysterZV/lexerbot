@@ -5,7 +5,8 @@ module.exports = {
         name: 'ban',
         desc: 'Bans a guild member',
         aliases: [],
-        category: 'mod'
+        category: 'mod',
+        usage: '{ User }'
     },
     config: {
         perms: ['BAN_MEMBERS'],

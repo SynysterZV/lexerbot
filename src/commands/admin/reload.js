@@ -4,13 +4,15 @@ module.exports = {
         name: 'reload',
         desc: 'Reloads a command',
         aliases: [],
-        category: 'admin'
+        category: 'admin',
+        usage: '{ command }'
     },
     config: {
-        perms: ['MANAGE_GUILD'],
+        perms: [],
         role: false
     },
     execute(message, args) {
+        if(message.author.id !== '372516983129767938') return;
         const c = args.single()
         const commandName = c ? c.toLowerCase() : undefined
         if (!commandName) {

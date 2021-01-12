@@ -5,7 +5,8 @@ module.exports = {
         name: 'dm',
         desc: 'DM\'s a user',
         aliases: [],
-        category: 'mod'
+        category: 'mod',
+        usage: '{ User }'
     },
     config: {
         perms: ['MANAGE_GUILD'],

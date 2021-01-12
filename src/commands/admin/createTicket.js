@@ -5,7 +5,8 @@ module.exports = {
         name: 'ticket',
         desc: 'Make a ticket Channel',
         aliases: [],
-        category: 'admin'
+        category: 'admin',
+        usage: '{ User | None }'
     },
     config: {
         perms: [],

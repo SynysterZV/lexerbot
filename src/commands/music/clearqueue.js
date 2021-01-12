@@ -3,7 +3,7 @@ module.exports = {
         name: 'clearqueue',
         desc: 'Clears the guilds queue',
         aliases: ['cq'],
-        category: 'music'
+        category: 'music',
     },
     config: {
         perms: [],

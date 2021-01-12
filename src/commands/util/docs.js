@@ -8,6 +8,7 @@ module.exports = {
         desc: 'Shows DJS docs',
         aliases: [],
         category: 'util',
+        usage: '{ search query } --src=SOURCE --p(Flag / include private) --u(Flag/ only url)'
     },
     config: {
         perms: false,

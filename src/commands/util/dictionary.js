@@ -7,7 +7,8 @@ module.exports = {
         name: 'dictionary',
         desc: 'Looks up on the google dictionary',
         aliases: ['dict'],
-        category: 'util'
+        category: 'util',
+        usage: '{ word } --l=LANGUAGE'
     },
     config: {
         perms: [],

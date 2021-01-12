@@ -9,14 +9,14 @@ module.exports = {
         name: 'mdn',
         desc: 'mdn',
         aliases: [],
-        category: 'util'
+        category: 'util',
+        usage: '{ search query }'
     },
     config: {
         perms: [],
         role: false
     },
     async execute(message, args) {
-        const s = args.save()
         const query = joinTokens(args.many())
         const queryString = qs.stringify({ q: query })
         const res = await fetch(`https://mdn.gideonbot.com/embed?${queryString}`)

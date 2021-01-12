@@ -5,10 +5,11 @@ module.exports = {
         name: 'nick',
         desc: 'Change your nickname',
         aliases: ['nickname'],
-        category: 'util'
+        category: 'util',
+        usage: '{ nickname }'
     },
     config: {
-        perms: ['ADMINISTRATOR'],
+        perms: [],
         role: false
     },
     execute(message, args) {

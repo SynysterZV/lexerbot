@@ -4,7 +4,8 @@ module.exports = {
         name: 'help',
         desc: 'Displays this embed!',
         aliases: [],
-        category: 'util'
+        category: 'util',
+        usage: '{ category name | command name }'
     },
     config: {
         perms: [],
@@ -58,7 +59,8 @@ module.exports = {
             embed.setDescription(command.help.desc)
             embed.addFields(
                 { name: 'Category:', value: command.help.category },
-                { name: 'Aliases:', value: command.help.aliases.length ? command.help.aliases : 'None' }
+                { name: 'Aliases:', value: command.help.aliases.length ? command.help.aliases : 'None' },
+                { name: 'Usage', value: command.help.usage ? `\`;${command.help.usage}\`` : 'None' }
             )
         } 
         return message.client.emit('reactDelete', (await message.channel.send(embed)), message.author);

@@ -3,7 +3,8 @@ module.exports = {
         name: 'clear',
         desc: 'Clears {x} amount of messages!',
         aliases: ['c'],
-        category: 'admin'
+        category: 'admin',
+        usage: '{ amount }'
     },
     config: {
         perms: ['MANAGE_MESSAGES'],

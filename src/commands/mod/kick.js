@@ -5,7 +5,8 @@ module.exports = {
         name: 'kick',
         desc: 'Kicks a member',
         aliases: [],
-        category: 'mod'
+        category: 'mod',
+        usage: '{ User }'
     },
     config: {
         perms: ['KICK_MEMBERS'],

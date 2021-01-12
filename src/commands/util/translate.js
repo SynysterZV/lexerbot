@@ -8,7 +8,8 @@ module.exports = {
         name: 'translate',
         desc: 'Translates!',
         aliases: ['t'],
-        category: 'util'
+        category: 'util',
+        usage: '{ string to translate | ^ | message id} --t=TO LANGUAGE --f=FROM LANGUAGE'
     },
     config: {
         perms: [],
@@ -20,6 +21,7 @@ module.exports = {
         let to = args.option('to', 't') || 'en'
         let from = args.option('from', 'f') || 'en'
         let query = joinTokens(args.many()).trim().replace(regex, '<Tag>') 
+        if(!query) return message.channel.send('You must provide a string or message id!')
         let author = message.author
 
         const val = (t, f) => {

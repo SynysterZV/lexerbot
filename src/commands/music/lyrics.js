@@ -7,7 +7,8 @@ module.exports = {
         name: 'lyrics',
         desc: 'Looks up lyrics on Genius API',
         aliases: ['lyr'],
-        category: 'music'
+        category: 'music',
+        usage: '{ "Artist" }{ Song Name }(Artist needs the quotes around if its more than one word)'
     },
     config: {
         perms: [],

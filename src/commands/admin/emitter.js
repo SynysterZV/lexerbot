@@ -3,7 +3,8 @@ module.exports = {
         name: 'emit',
         desc: 'Emits an event',
         aliases: [],
-        category: 'admin'
+        category: 'admin',
+        usage: '{ Event }{ Parameter }'
     },
     config: {
         perms: [],

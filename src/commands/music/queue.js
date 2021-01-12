@@ -5,7 +5,8 @@ module.exports = {
         name: 'queue',
         desc: 'Shows guild queue',
         aliases: ['q'],
-        category: 'music'
+        category: 'music',
+        usage: '{ Page # }'
     },
     config: {
         perms: [],
