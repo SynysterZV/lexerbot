@@ -1,6 +1,8 @@
 const { Client, Collection, MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const lexure = require('lexure')
+const Spotify = require('erela.js-spotify')
+
 module.exports = class extends Client {
     constructor(config) {
         super({
@@ -17,7 +19,27 @@ module.exports = class extends Client {
         this.commands = new Collection();
         this.interactions = new Collection();
         this.config = config
+        this.token = config.keyring.discord
         this.constants = require('./constants')
+        const clientID = config.keyring.spotify.id
+        const clientSecret = config.keyring.spotify.secret
+        this.erdata = {
+            nodes: [
+                {
+                host: 'localhost',
+                password: 'youshallnotpass',
+                port: 2334
+            }
+        ],
+            plugins: [
+                new Spotify({
+                    clientID,
+                    clientSecret
+                })
+            ]
+        };
+
+        if (!this.token) throw new Error('You must provide a token to run the bot!');
         
         fs.readdir('./commands', {withFileTypes: true}, (err, files) => {
             if(err) throw err;
@@ -94,9 +116,9 @@ module.exports = class extends Client {
             if (cmd.config.role && !message.member.roles.cache.some(role => role.name === cmd.config.role)) return message.channel.send('You dont have the role to use this command!')
             return {cmd, args}
         }
-    }
 
-    
+
+    }
     
 }
 

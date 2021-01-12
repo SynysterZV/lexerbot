@@ -2,10 +2,6 @@ const fetch = require('node-fetch')
 const { MessageEmbed } = require('discord.js')
 const tr = require('googletrans').default
 
-const toUp = (word) => {
-    return word.charAt(0).toUpperCase() + word.slice(1)
-}
-
 module.exports = {
     help: {
         name: 'dictionary',
@@ -34,17 +30,18 @@ module.exports = {
         const res = await fetch(uri).then(res => res.json())
         if(!res[0]?.word) return message.channel.send('We couldnt find that word!')
 
-        const gd = await tr('Google Dictionary', { to: l.lang, from: 'en'});
+        const gd = await tr(['Google Dictionary', 'Example'], { to: l.lang, from: 'en'});
 
         const embed = new MessageEmbed()
-            .setAuthor(`${gd.text} - ${toUp(res[0].word)}`, 'https://cdn4.iconfinder.com/data/icons/social-media-and-logos-11/32/Logo_Google-512.png')
+            .setAuthor(`${gd.textArray[0]} - ${res[0].word.cap()}`, 'https://cdn4.iconfinder.com/data/icons/social-media-and-logos-11/32/Logo_Google-512.png')
+            .setColor('BLUE')
 
 
         for(const i of res[0].meanings) {
-            embed.addField(`\u200b`, `» **__${toUp(i.partOfSpeech)}__**`)
+            embed.addField(`\u200b`, `» **__${i.partOfSpeech.cap()}__**`)
             const defs = i.definitions.splice(0,2)
             for(const def of defs) {
-                embed.addField(`- ${def.definition}`, `Example: *${def.example || 'None'}*`)
+                embed.addField(`- ${def.definition}`, `${gd.textArray[1]}: *${def.example || 'None'}*`)
         }
     }
 

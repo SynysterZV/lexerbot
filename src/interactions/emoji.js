@@ -4,7 +4,6 @@ module.exports = (client, interaction) => {
             type: 3,
             data: {
                 content: `${interaction.data.options[0].value}`,
-                flags: 1<<6
             }
         }
     })

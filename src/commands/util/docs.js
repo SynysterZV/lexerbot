@@ -18,6 +18,7 @@ module.exports = {
         let source = args.option('src') ?? 'stable';
         const force = args.flag('force', 'f');
         const includePrivate = args.flag('private', 'p');
+        const urlonly = args.flag('url', 'u');
         const q = query.split(' ');
         console.log( query, source )
 
@@ -30,7 +31,11 @@ module.exports = {
         if(!embed) {
             message.channel.send('No Results!')
         }
+        
+        if(!urlonly) {
         return (await message.channel.send({embed})).reactDelete(message.author)
+        }
+        return message.channel.send(embed.url)
 
     }
 }

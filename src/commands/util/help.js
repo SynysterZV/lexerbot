@@ -20,12 +20,14 @@ module.exports = {
             categories.push(c.name)
         })
 
+        const catmap = categories.map(c => `•${c.cap()}`).join('\n')
+
         if (!input) {
         embed.setTitle('Help')
         embed.setFooter(message.guild, message.guild.iconURL())
         embed.setTimestamp()
         embed.addFields(
-            {name: 'Categories', value: `•Admin\n•Util\n•Mod\n\nI.E. \`${message.client.config.prefix}help {category}\``}
+            {name: 'Categories', value: `${catmap}\n\nI.E. \`${message.client.config.prefix}help {category}\``}
         )
         } else if(categories.includes(input)) {
             const multiple = 10

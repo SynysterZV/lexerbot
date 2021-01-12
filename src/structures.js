@@ -26,6 +26,10 @@ GuildChannelManager.prototype.createTicket = async function (name, message, opti
     
       }
 
+String.prototype.cap = function () {
+    return this.charAt(/\b/).toUpperCase() + this.slice(1)
+}
+
 
 
 module.exports = Client 
