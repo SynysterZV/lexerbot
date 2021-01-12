@@ -169,10 +169,8 @@ module.exports = class extends Client {
                 .setFooter(guild, guild.iconURL())
                 .setTimestamp()
                 .setThumbnail(track.thumbnail);
-            if(track.uri !== 'https://www.youtube.com/watch?v=Q-tH0olciZU') {
-            this.channels.cache.get(player.textChannel).send(embed).then(m => m.delete({ timeout: 10000 }));
-          }
-          else {return;}
+            
+            return this.channels.cache.get(player.textChannel).send(embed).then(m => m.delete({ timeout: 10000 }));
           })
           .on('queueEnd', (player) => {
             this.channels.cache
