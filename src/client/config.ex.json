@@ -1,9 +1,16 @@
 {
-    "token": "Token Goes Here",
+    "keyring": {
+        "discord": "Discord Bot Token", 
+        "spotify": { 
+            "id": "Spotify Client ID", 
+            "secret": "Spotify Client Secret" 
+        },
+        "genius": "Genius API Token"
+    },
     "prefix": ".",
     "presence": {
         "activity": {
-            "type": "PLAYING",
+
             "name": "with code"
         },
         "status": "dnd"
