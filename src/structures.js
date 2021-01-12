@@ -27,7 +27,12 @@ GuildChannelManager.prototype.createTicket = async function (name, message, opti
       }
 
 String.prototype.cap = function () {
-    return this.charAt(/\b/).toUpperCase() + this.slice(1)
+    const str = this.split(/\s+/)
+    const strarray = []
+    for(const string of str) {
+        strarray.push(string.charAt(0).toUpperCase() + string.slice(1))
+    }
+    return strarray.join(' ')
 }
 
 

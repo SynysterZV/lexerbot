@@ -4,7 +4,7 @@ module.exports = {
     help: {
         name: 'ticket',
         desc: 'Make a ticket Channel',
-        aliases: ['s'],
+        aliases: [],
         category: 'admin'
     },
     config: {

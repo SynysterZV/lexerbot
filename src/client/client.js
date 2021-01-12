@@ -1,6 +1,7 @@
 const { Client, Collection, MessageEmbed } = require('discord.js');
 const fs = require('fs');
 const lexure = require('lexure')
+const { Manager } = require('erela.js')
 const Spotify = require('erela.js-spotify')
 
 module.exports = class extends Client {
@@ -13,33 +14,31 @@ module.exports = class extends Client {
                 version: 8
             }
         });
+        if(!config) throw new Error('You must supply a config file!');
 
+    /*
+    *
+    * ENVIRONMENT
+    * SETTING
+    * 
+    */
 
-
-        this.commands = new Collection();
+       this.commands = new Collection();
         this.interactions = new Collection();
         this.config = config
         this.token = config.keyring.discord
         this.constants = require('./constants')
-        const clientID = config.keyring.spotify.id
-        const clientSecret = config.keyring.spotify.secret
-        this.erdata = {
-            nodes: [
-                {
-                host: 'localhost',
-                password: 'youshallnotpass',
-                port: 2334
-            }
-        ],
-            plugins: [
-                new Spotify({
-                    clientID,
-                    clientSecret
-                })
-            ]
-        };
 
-        if (!this.token) throw new Error('You must provide a token to run the bot!');
+        if(!config.keyring.discord) throw new Error('You need a bot token to use the bot!')
+
+ 
+
+    /*
+    * 
+    * COMMAND
+    * LOADER
+    * 
+    */
         
         fs.readdir('./commands', {withFileTypes: true}, (err, files) => {
             if(err) throw err;
@@ -84,6 +83,14 @@ module.exports = class extends Client {
             int(this, interaction)
         })
 
+    /*
+    *
+    * LEXURE
+    * ARGUMENT
+    * PARSING
+    *
+    */
+
         this.lex = async (message) => {
                 // LEXER
             const lexer = new lexure.Lexer(message.content)
@@ -117,10 +124,54 @@ module.exports = class extends Client {
             return {cmd, args}
         }
 
+    /*
+    *
+    * ERELA.JS
+    * MUSIC
+    * MANAGER
+    * 
+    */
 
-    }
-    
+        this.manager = new Manager({
+            plugins: [
+                new Spotify({
+                    clientID: config.keyring.spotify.id,
+                    clientSecret: config.keyring.spotify.secret
+                })
+            ],
+            send: (id, payload) => {
+                const guild = this.guilds.cache.get(id);
+                if (guild) guild.shard.send(payload);
+            }
+          })
+          .on('nodeConnect', node => console.log("\x1b[36m",`Node ${node.options.identifier} connected`,"\x1b[0m"))
+          .on('nodeError', (node, error) => console.log(`Node ${node.options.identifier} has had an error ${error}`))
+          .on('trackStart', (player, track) => {
+            const guild = this.guilds.cache.get(player.guild);
+            const req = guild.member(track.requester);
+            const embed = new MessageEmbed()
+                .setTitle('» Now Playing: ')
+                .setDescription(`[${track.title}](${track.uri})`)
+                .setAuthor(req.user.tag, req.user.displayAvatarURL())
+                .setFooter(guild, guild.iconURL())
+                .setTimestamp()
+                .setThumbnail(track.thumbnail);
+            if(track.uri !== 'https://www.youtube.com/watch?v=Q-tH0olciZU') {
+            this.channels.cache.get(player.textChannel).send(embed).then(m => m.delete({ timeout: 10000 }));
+          }
+          else {return;}
+          })
+          .on('queueEnd', (player) => {
+            this.channels.cache
+                .get (player.textChannel)
+                .send('Queue has ended.');
+          
+            player.destroy();
+          })
+          .on('playerMove', (player, currentChannel, newChannel) => {
+            player.voiceChannel = this.channels.cache.get(newChannel);
+          });
+          
+          this.on('raw', (d) => this.manager.updateVoiceState(d));
+    }   
 }
-
-
-
