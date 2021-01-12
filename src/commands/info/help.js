@@ -4,7 +4,7 @@ module.exports = {
         name: 'help',
         desc: 'Displays this embed!',
         aliases: [],
-        category: 'util',
+        category: 'info',
         usage: '{ category name | command name }'
     },
     config: {
@@ -63,6 +63,6 @@ module.exports = {
                 { name: 'Usage', value: command.help.usage ? `\`;${command.help.usage}\`` : 'None' }
             )
         } 
-        return message.client.emit('reactDelete', (await message.channel.send(embed)), message.author);
+        return (await message.channel.send(embed)).reactDelete(message.author)
     }
 }

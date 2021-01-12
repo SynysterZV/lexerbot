@@ -3,7 +3,7 @@ module.exports = {
         name: 'invite',
         desc: 'Invite the bot to your server',
         aliases: [],
-        category: 'util'
+        category: 'info'
     },
     config: {
         perms: [],

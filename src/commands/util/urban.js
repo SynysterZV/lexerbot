@@ -32,6 +32,8 @@ module.exports = {
         }
         const def = res.list[0]
 
+        if(def.definition.length > 2048) return message.reply('This definition is too long!')
+
         const embed = new MessageEmbed()
             .setAuthor(`Urban Dictionary`, 'https://play-lh.googleusercontent.com/unQjigibyJQvru9rcCOX7UCqyByuf5-h_tLpA-9fYH93uqrRAnZ0J2IummiejMMhi5Ch')
             .setColor('YELLOW')

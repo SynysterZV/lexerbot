@@ -99,7 +99,7 @@ module.exports = class extends Client {
                     ['"', '"']
                 ]);
             const regx = new RegExp(`^<@!?${this.user.id}>`);
-            const res = lexer.lexCommand(s => regx.test(s) ? 22 : s.startsWith(';') ? 1 : null)
+            const res = lexer.lexCommand(s => regx.test(s) ? 22 : s.startsWith(config.prefix) ? config.prefix.length : null)
             if (res == null) {
                 if(message.author.bot) return
 
@@ -112,11 +112,14 @@ module.exports = class extends Client {
                     .setTimestamp()
                 return (await message.client.fetchApplication()).owner.send(embed).catch(e => {})
                 }
-                if(regx.test(message.cotent) || message.content.startsWith(';')) {
+                if(regx.test(message.cotent) || message.content.startsWith(config.prefix)) {
                 const embed = new MessageEmbed()
                 .setAuthor(this.user.tag, this.user.displayAvatarURL())
-                .setDescription('You can use `;help` to view a list of my commands!')
-                return message.channel.send(embed)
+                .setDescription(`You can use \`${config.prefix}help\` to view a list of my commands!`)
+                const mes = await message.channel.send(embed)
+                return setTimeout(() => {
+                    mes.delete()
+                }, 5000)
                 }
                 return;
             }
@@ -133,7 +136,9 @@ module.exports = class extends Client {
             //PERMISSIONS HANDLER
             if(cmd.config.perms && !message.member.permissions.has(cmd.config.perms)) return message.channel.send('You dont have the permissions to use this command!');
             if (cmd.config.role && !message.member.roles.cache.some(role => role.name === cmd.config.role)) return message.channel.send('You dont have the role to use this command!')
+            if(message.guild.me.permissions.has(['MANAGE_MESSAGES'])) {
             message.delete();
+            }
             return {cmd, args}
         }
 

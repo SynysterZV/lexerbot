@@ -4,8 +4,8 @@ module.exports = {
     help: {
         name: 'repo',
         desc: 'Displays this bots GitHub repo',
-        aliases: ['github', 'git'],
-        category: 'util'
+        aliases: [],
+        category: 'info'
     },
     config: {
         perms: [],

@@ -3,7 +3,7 @@ module.exports = {
         name: 'info',
         desc: 'Displays the bots info',
         aliases: [],
-        category: 'util'
+        category: 'info'
     },
     config: {
         perms: [],

@@ -12,6 +12,7 @@ Structures.extend('Message', C => class extends C {
             this.awaitReactions(filter, { max: 1, time: 30000, errors: ['time']})
                 .then((collected) => {
                     this.delete() }).catch((collected) => {
+                        if(!channel.guild.me.permissions.has(['MANAGE_MESSAGES'])) return
                         this.reactions.removeAll() 
                     })
         }
