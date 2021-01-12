@@ -5,3 +5,4 @@ ts_source/
 logs/
 .eslintrc.json
 module_frame.js
+database.sqlite
