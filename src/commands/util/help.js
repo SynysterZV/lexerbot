@@ -20,7 +20,7 @@ module.exports = {
             categories.push(c.name)
         })
 
-        const catmap = categories.map(c => `•${c.cap()}`).join('\n')
+        const catmap = categories.slice(1).map(c => `•${c.cap()}`).join('\n')
 
         if (!input) {
         embed.setTitle('Help')

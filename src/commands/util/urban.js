@@ -15,12 +15,21 @@ module.exports = {
     },
     async execute(message, args) {
         const regex = new RegExp(/\[([\w\s,]+)\]/g)
-        const uri = `http://api.urbandictionary.com/v0/define?term=${joinTokens(args.many())}`
+        const baseuri = `http://api.urbandictionary.com/v0/`
+        const query = joinTokens(args.many())
+        let uri = `${baseuri}define?term=${query}`
+
+        if(!query) {
+            uri = `${baseuri}random`
+        }
+
+        uri = encodeURI(uri)
 
         const res = await fetch(uri).then(res => res.json())
-
+        if(!res.list.length) {
+            return message.reply('Im sorry, I couldnt find that word on Urban Dictionary!')
+        }
         const def = res.list[0]
-        console.log(def)
 
         const embed = new MessageEmbed()
             .setAuthor(`Urban Dictionary`, 'https://play-lh.googleusercontent.com/unQjigibyJQvru9rcCOX7UCqyByuf5-h_tLpA-9fYH93uqrRAnZ0J2IummiejMMhi5Ch')
