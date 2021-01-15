@@ -2,7 +2,7 @@ module.exports = (client, member) => {
     if(member.user.username == 'Varkatzas') return;
     const { MessageEmbed } = require('discord.js');
     member.client.guilds.fetch(member.guild.id)
-    const channel = member.guild.channels.cache.find(c => c.name === 'member-log')
+    const channel = member.guild.channels.cache.find(c => c.name === 'member-log' || c.name === 'testing')
     if(!channel) return;
     const embed = new MessageEmbed()
         .setTitle('Member Left')
@@ -12,7 +12,7 @@ module.exports = (client, member) => {
                 name: '**Created At:**', value: new Date(member.user.createdAt).toDateString(), inline: true,
             },
             {
-                name: '**Left:**', value: new Date(Date.now()).toDateString(), inline: true,
+                name: '**Left:**', value: new Date(Date.now()).toLocaleString(), inline: true,
             },
             {
                 name: '\u200b', value: '\u200b', inline: true,

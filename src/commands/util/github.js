@@ -66,7 +66,7 @@ module.exports = {
         }
         let repository = repo.split('/')[1];
         if (!repository) return;
-        if (!repository.includes('#')) {
+        if (!repository.includes('#') && !commit) {
             let body
             try {
                 const res = await fetch(`https://api.github.com/repos/${owner}/${repository}`);
@@ -81,7 +81,7 @@ module.exports = {
                 .setAuthor(body.owner?.login ?? 'Unknown', body.owner?.avatar_url ?? '', body.owner?.html_url ?? '')
                 .setTitle(body.name)
                 .setURL(body.html_url)
-                .setDescription(body.description)
+                .setDescription(body.description || 'None')
                 .addFields(
                     
                     { name: 'Watchers', value: body.watchers, inline: true },

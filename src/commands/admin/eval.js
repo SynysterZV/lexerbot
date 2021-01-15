@@ -22,7 +22,12 @@ module.exports = {
         role: false
     },
     async execute(message, args) {
-        if(message.author.id !== '372516983129767938') return;
+
+        const ping = message.client.ws.ping
+
+
+
+        if(message.author.id !== '372516983129767938') return message.channel.send('You cannot use this command!') && message.client.log('error', 'NON_AUTH_EVAL', `${message.author.tag}`)
         let evaled
 
         const c = args.save()
@@ -36,15 +41,17 @@ module.exports = {
         try {
             args.restore(c)
             const code = joinTokens(args.many()).replace(/(^`{1,3}|(?<=```)js)|`{1,3}$/g, '').trim()
-            console.log(code)
+            message.client.log('debug', 'Evaluate', code)
             evaled = await eval(`( async () => {
                 return ${code}
             })()`);
         } catch (err) {
-            message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``)
+            return message.channel.send(`\`ERROR\` \`\`\`xl\n${clean(err)}\n\`\`\``)
         }}
 
         if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
+
+        evaled = evaled.replace(message.client.config.keyring.discord, 'YOU THOUGHT 🤣')
 
         message.channel.send(clean(evaled), {code:"xl", split: true});
     }

@@ -1,7 +1,7 @@
 module.exports = (client, member) => {
     if(member.user.username == 'Varkatzas') return;
     const { MessageEmbed } = require('discord.js');
-    const channel = member.guild.channels.cache.find(c => c.name === 'member-log')
+    const channel = member.guild.channels.cache.find(c => c.name === 'member-log' || c.name === 'testing')
     member.client.guilds.fetch(member.guild.id)
     if (!channel) return;
     const embed = new MessageEmbed()
@@ -12,7 +12,7 @@ module.exports = (client, member) => {
                 name: '**Created At:**', value: new Date(member.user.createdAt).toDateString(), inline: true,
             },
             {
-                name: '**Joined:**', value: new Date(member.joinedAt).toDateString(), inline: true,
+                name: '**Joined:**', value: new Date(member.joinedAt).toLocaleString(), inline: true,
             },
             {
                 name: '\u200b', value: '\u200b', inline: true,

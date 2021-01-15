@@ -1,12 +1,12 @@
-const LexureClient = require('./structures')
+const Lexer = require('./structures')
 const DiscordRPC = require('discord-rpc')
 
-const client = new LexureClient(require('./client/config.json'));
+const client = new Lexer(require('./client/config.json'));
 
 
 
 process.on('unhandledRejection', e => {
-    console.log(e);
+    client.log('error', 'Unhandled Rejection', e)
 })
 
 
@@ -33,7 +33,7 @@ async function setActivity() {
 
 rpc.on('ready', () => {
   setActivity();
-  console.log('RPC Connected!')
+  client.log('success', 'RPC', 'CONNECTED!')
 
   // activity can only be set every 15 seconds
   setInterval(() => {
@@ -41,9 +41,4 @@ rpc.on('ready', () => {
   }, 15e3);
 });
 
-rpc.login({ clientId }).catch(e => {
-    console.log(e)
-    if(e === 'RPC_CONNECITON_TIMEOUT') {
-        console.log('Ha')
-    }
-});
+rpc.login({ clientId }).catch(e => { client.log('error', 'RPC_ERR', e) });

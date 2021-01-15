@@ -1,4 +1,5 @@
 module.exports = (client) => {
-    console.log(`Logged in as ${client.user.tag}`)
+    client.log('success', 'Client Ready', `${client.user.tag}`)
+    client.user.setPresence(client.config.presence)
     client.manager.init(client.user.id)
 }

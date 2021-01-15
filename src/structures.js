@@ -4,7 +4,8 @@ const { GuildChannelManager } = require('discord.js')
 
 require('./structures/Message')
 require('./structures/GuildMember')
-const Client = require('./client/client')
+const Lexer = require('./client/client')
+
 
 GuildChannelManager.prototype.createTicket = async function (name, message, options = {}) {
         if(message.author.id === message.client.user.id) return message.channel.send('The bot cannot have a ticket!')
@@ -37,4 +38,4 @@ String.prototype.cap = function () {
 
 
 
-module.exports = Client 
+module.exports = Lexer

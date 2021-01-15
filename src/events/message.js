@@ -1,4 +1,5 @@
 module.exports = async (client, message) => {
+
     if(message.author.bot) return;
 
     const command = await client.lex(message);

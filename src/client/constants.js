@@ -9,6 +9,15 @@ module.exports.DOCUMENTATION_SOURCES = [
     'collection',
 ]
 
+module.exports.eventColors = {
+    BAN: "RED",
+    KICK: "ORANGE",
+    WARN: "YELLOW",
+    MUTE: "BLUE",
+    UNMUTE: "GREEN",
+    UNBAN: "GREEN"
+}
+
 
 module.exports.LANGS = [
     {

@@ -16,11 +16,12 @@ module.exports = {
         role: false
     },
     async execute(message, args) {
-        const regex = new RegExp(/<(@(&|!)?|#)[0-9]{17,19}>/g)
+        const regex = new RegExp(/<(@(&|!)?|#)[0-9]{17,19}>|(?:<a)(?=:):[A-Za-z]+:[0-9]*>?/g)
+
         const { LANGS } = message.client.constants
         let to = args.option('to', 't') || 'en'
         let from = args.option('from', 'f') || 'en'
-        let query = joinTokens(args.many()).trim().replace(regex, '<Tag>') 
+        let query = joinTokens(args.many()).trim()
         if(!query) return message.channel.send('You must provide a string or message id!')
         let author = message.author
 
@@ -43,7 +44,7 @@ module.exports = {
 
         if(query === '^') {
             const res = (await message.channel.messages.fetch({ before: message.id, limit: 1 })).first()
-            query = res.content.replace(regex, '<Tag>')
+            query = res.content
             author = res.author 
         }
         if(Number(query.split('-')[0])) {
@@ -51,9 +52,10 @@ module.exports = {
             msgid = msgid[1] || msgid[0]
             const res = await message.channel.messages.fetch(msgid).catch(() => false)
             if(!res) return message.reply('Please provide a valid message id!')
-            query = res.content.replace(regex, '<Tag>')
+            query = res.content
             author = res.author
         }
+        query = query.replace(regex, '')
 
         const tf = val(to, from)
         if(!tf) return message.channel.send('Please provide a valid language!')

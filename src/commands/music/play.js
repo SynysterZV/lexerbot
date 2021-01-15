@@ -56,8 +56,14 @@ module.exports = {
               if (!player.playing && !player.paused && player.queue.totalSize === res.tracks.length) player.play();
               return message.reply(`Adding playlist \`${res.playlist.name}\` with ${res.tracks.length} tracks to the queue.`);
             case 'SEARCH_RESULT':
-
-              if(!first) {
+              if(first) {
+                const track = res.tracks[0];
+                player.queue.add(track);
+        
+          
+                if (!player.playing && !player.paused && !player.queue.size) return player.play();
+                return message.reply(`adding \`${track.title}\` to the queue.`);
+              }
               let max = 5, collected, filter = (m) => m.author.id === message.author.id && /^(\d+|end)$/i.test(m.content);
               if (res.tracks.length < max) max = res.tracks.length;
   
@@ -77,6 +83,7 @@ module.exports = {
               }
   
               const first = collected.first().content;
+              collected.first().delete()
   
               if (first.toLowerCase() === 'end') {
                 if (!player.queue.current) player.destroy();
@@ -94,14 +101,8 @@ module.exports = {
               if (!player.playing && !player.paused && !player.queue.size) return player.play();
               return message.reply(`adding \`${track.title}\` to the queue.`);
           });
-        }
 
-        const track = res.tracks[0];
-        player.queue.add(track);
 
-  
-        if (!player.playing && !player.paused && !player.queue.size) return player.play();
-        return message.reply(`adding \`${track.title}\` to the queue.`);
         
           }
     }
