@@ -1,9 +1,10 @@
 const Lexer = require('./structures')
 const DiscordRPC = require('discord-rpc')
+const fetch = require('node-fetch')
 
 const client = new Lexer(require('./client/config.json'));
 
-
+client.loadAll()
 
 process.on('unhandledRejection', e => {
     client.log('error', 'Unhandled Rejection', e)
@@ -20,10 +21,9 @@ async function setActivity() {
   if (!rpc) {
     return;
   }
-
   rpc.setActivity({
-    details: 'I am a fairly new bot,',
-    state: 'but ill do.',
+    details: `Used in`,
+    state: `${client.guilds.cache.size} servers!`,
     largeImageKey: 'snek_small',
     largeImageText: 'BOII',
     buttons: [{ label: 'Invite Me!', url: 'https://synyster.page.link/Eit5'}, { label: 'Join my server!', url: 'http://gg.synyster.org'}],
@@ -41,4 +41,5 @@ rpc.on('ready', () => {
   }, 15e3);
 });
 
+client.rpc = rpc
 rpc.login({ clientId }).catch(e => { client.log('error', 'RPC_ERR', e) });

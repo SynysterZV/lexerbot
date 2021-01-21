@@ -1,7 +1,7 @@
 module.exports = {
     help: {
         name: 'unmute',
-        description: 'unmute a user',
+        desc: 'unmute a user',
         aliases: [],
         category: 'mod',
         usage: '{ User }'

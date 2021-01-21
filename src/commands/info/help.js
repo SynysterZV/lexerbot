@@ -11,7 +11,7 @@ module.exports = {
         perms: [],
         role: false
     },
-    async execute(message, args) {
+    async execute(message, args, prefix) {
         let embed = new MessageEmbed()
         let d = args.single(); let input = d ? d.toLowerCase() : undefined
 
@@ -28,7 +28,7 @@ module.exports = {
         embed.setFooter(message.guild, message.guild.iconURL())
         embed.setTimestamp()
         embed.addFields(
-            {name: 'Categories', value: `${catmap}\n\nI.E. \`${message.client.config.prefix}help {category}\``}
+            {name: 'Categories', value: `${catmap}\n\nI.E. \`${prefix}help {category}\``}
         )
         } else if(categories.includes(input)) {
             const multiple = 10
@@ -46,7 +46,7 @@ module.exports = {
                 embed.setTimestamp()
     
             for(const i in commands) {
-                embed.addField(`${message.client.config.prefix}${commands[i].help.name}`, commands[i].help.desc)
+                embed.addField(`${prefix}${commands[i].help.name}`, commands[i].help.desc)
             }
 
         } else {

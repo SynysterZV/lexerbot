@@ -3,7 +3,7 @@ const { joinTokens } = require('lexure')
 module.exports = {
     help: {
         name: 'warn',
-        description: 'Warns a user',
+        desc: 'Warns a user',
         aliases: [],
         category: 'mod',
         usage: '{ User } { Reason }'
@@ -21,7 +21,7 @@ module.exports = {
         if(!reason) return message.reply('Please provide a warn reason!')
         const executor = message.author
 
-        message.client.emit('modEvent', 'WARN', {member, reason, executor})
+        message.client.emit('modEvent', 'WARN', {member, reason, executor, context: message.url })
         return message.reply(`Successfully warned **${member.user.tag}** for **${reason}**`)
     }
 

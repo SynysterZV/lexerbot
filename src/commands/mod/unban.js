@@ -3,7 +3,7 @@ const { joinTokens } = require('lexure')
 module.exports = {
     help: {
         name: 'unban',
-        description: 'Unbans a user',
+        desc: 'Unbans a user',
         aliases: [],
         category: 'mod',
         usage: '{ User } { Reason }'

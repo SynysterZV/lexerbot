@@ -36,6 +36,10 @@ String.prototype.cap = function () {
     return strarray.join(' ')
 }
 
+Number.prototype.isEven = function () {
+    return(!(this&1))
+}
+
 
 
 module.exports = Lexer

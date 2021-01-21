@@ -15,7 +15,7 @@ module.exports = {
         let embed
         const mem = args.single()
         if(!mem) {
-            const roles = message.member.roles.cache.sort((a,b) => b.position - a.position).map(r=> `\`${r.name}\``).join(', ')
+            const roles = message.member.roles.cache.sort((a,b) => b.position - a.position).filter(r => r.name != '@everyone').map(r=> `\`${r.name}\``).join(', ')
             const joinedTime = new Date(message.member.joinedAt).toDateString()
             const createdTime = new Date(message.author.createdAt).toDateString()
             embed = new MessageEmbed()

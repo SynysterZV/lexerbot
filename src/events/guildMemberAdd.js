@@ -12,7 +12,7 @@ module.exports = (client, member) => {
                 name: '**Created At:**', value: new Date(member.user.createdAt).toDateString(), inline: true,
             },
             {
-                name: '**Joined:**', value: new Date(member.joinedAt).toLocaleString(), inline: true,
+                name: '**Joined:**', value: `${new Date(member.joinedAt).toLocaleString()} EST`, inline: true,
             },
             {
                 name: '\u200b', value: '\u200b', inline: true,
@@ -26,6 +26,8 @@ module.exports = (client, member) => {
         )
         .setFooter(member.guild.name, member.guild.iconURL())
         .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
+        .setTimestamp()
         .setColor('GREEN')
+    client.log('success', 'MEMBER JOINED', member.user.tag)
     channel.send(embed)
 }

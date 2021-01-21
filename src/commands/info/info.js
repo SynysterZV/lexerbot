@@ -15,6 +15,10 @@ module.exports = {
             const actualMemberCount = g.members.cache.filter(f => !f.user.bot).size
             userCount += Number(actualMemberCount)
         })
+
+        const mem = (process.memoryUsage().heapUsed)/1000000
+        const cpu = (process.cpuUsage().system)/1000000
+
         const CA = await message.client.fetchApplication()
         const embed = new (require('discord.js')).MessageEmbed()
             .setAuthor(message.client.user.tag, message.client.user.displayAvatarURL())
@@ -24,7 +28,7 @@ module.exports = {
                     name: '**Discord Data**', value: `•Guilds: \`${message.client.guilds.cache.size}\`\n•Channels: \`${message.client.channels.cache.size}\`\n•Users: \`${userCount}\``
                 },
                 {
-                    name: 'Usage Stats', value: `•CPU Usage: \`${Math.ceil(process.cpuUsage().user) / 1000000}%\`\n•Memory Usage: \`${Math.round(process.memoryUsage().heapUsed / 1000000)}MB\``
+                    name: 'Usage Stats', value: `•CPU Usage: \`${Math.round(cpu)}%\`\n•Memory Usage: \`${Math.round(mem)}MB\``
                 },
                 {
                     name: '**Owner**', value: CA.owner

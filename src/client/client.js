@@ -1,25 +1,38 @@
 const { Client, Collection, MessageEmbed } = require('discord.js');
-const fs = require('fs');
+const prettyms = require('pretty-ms')
+const path = require('path')
 const lexure = require('lexure')
+const fs = require('fs');
+
+/*-------ERELA.JS LAVALINK EXTENSION-----------*/
 const { Manager } = require('erela.js')
 const Spotify = require('erela.js-spotify')
+/*---------------------------------------------*/
+
+/*---LOGGING (FORMAT & LOGGER) REQUIREMENTS----*/
 const chalk = require('chalk');
 const moment = require('moment');
 const { createLogger, format, transports } = require('winston')
 const { combine, label, printf } = format
-
-const toUpper = string => string.charAt(0).toUpperCase() + string.slice(1);
+/*----------------------------------------------*/
 
 const Keyv = require('keyv')
-
 const prefixes = new Keyv('sqlite://database.sqlite')
+
 
 class LexClient extends Client {
     constructor(config) {
         super({
             disableMentions: 'everyone',
             partials: ['GUILD_MEMBER', 'MESSAGE'],
+            ws: {
+                properties: {
+                    $browser: 'Discord iOS'
+                }
+            }
         });
+
+        
 
 
     /*
@@ -40,11 +53,11 @@ class LexClient extends Client {
 
         const form = printf(({ level, message, label }) => {
             const style = levels[level]
-            return `${style.bold(`[${moment().format('HH:mm:ss')} ${toUpper(label)}]`)} ${style(`${message}`)}`
+            return `${style.bold(`[${moment().format('HH:mm:ss')} ${this.util.toUpper(label)}]`)} ${style(`${message}`)}`
         })
 
         const simpleform = printf(({ level, message, label }) => {
-            return `[${moment().format('HH:mm:ss')} ${toUpper(label)}] ${message}`
+            return `[${moment().format('HH:mm:ss')} ${this.util.toUpper(label)}] ${message}`
         })
 
         const logger = createLogger({
@@ -87,10 +100,6 @@ class LexClient extends Client {
         if(!config) throw this.log('error', 'NO_CONFIG', 'You must supply a config file!');
         if(!config.keyring.discord) throw this.log('error', 'NO_BOT_TOKEN', 'You need a bot token to use the bot!')
 
-
-
-
-
     /*
     *
     * ENVIRONMENT
@@ -100,13 +109,19 @@ class LexClient extends Client {
  
 
        this.commands = new Collection();
+       this.paths = {
+           commands: new Collection(),
+           events: new Collection(),
+           interactions: new Collection()
+       }
         this.interactions = new Collection();
         this.muted = new Collection();
+
         this.config = config
         this.token = config.keyring.discord
         this.constants = require('./constants')
+        this.util = require('./util')
         this.prefixes = prefixes
-
 
     /*
     * 
@@ -115,7 +130,8 @@ class LexClient extends Client {
     * 
     */
         
-        fs.readdir('./commands', {withFileTypes: true}, (err, files) => {
+        this.loadCommands = () => {
+            fs.readdir('./commands', {withFileTypes: true}, (err, files) => {
             if(err) throw this.log('error', 'ERR_COMMAND_ROOT', err);
             const folders = files.filter(f => f.isDirectory())
             const cmdfiles = files.filter(f => f.name.endsWith('.js'))
@@ -124,6 +140,7 @@ class LexClient extends Client {
                     if(err) throw this.log('error', 'ERR_COMMAND_SUBDIRS', err);
                     files.forEach(f => {
                         const command = require(`../commands/${fo.name}/${f}`)
+                        this.paths.commands.set(command.help.name, path.join(__dirname, '..', 'commands', fo.name, f))
                         this.commands.set(command.help.name, command)
                     })
                 })
@@ -133,24 +150,46 @@ class LexClient extends Client {
                 this.commands.set(command.help.name, command)
             })
         })
+    }
     
-        fs.readdir('./events', (err, files) => {
+        this.loadEvents = (p) => {
+            if (p) {
+                const event = require(p)
+                let eventName = path.basename(p).split('.')[0]
+                this.on(eventName, event.bind(null, this));
+                this.log('info', 'EVENT RELOADED', eventName);
+                return delete require.cache[require.resolve(p)]
+            }
+            fs.readdir('./events', (err, files) => {
             if(err) throw this.log('error', 'ERR_EVENTS', err);
             files.forEach(f => {
                 const event = require(`../events/${f}`)
                 let eventName = f.split('.')[0]
+                if(!this.paths.events.length) this.paths.events.set(eventName.toLowerCase(), path.join(__dirname, '..', 'events', f))
                 this.on(eventName, event.bind(null, this));
+                this.log('info', 'EVENT LOADED', eventName)
                 delete require.cache[require.resolve(`../events/${f}`)]
             })
         })
+    }
 
-        fs.readdir('./interactions', (err, files) => {
+        this.loadInteractions = () => {
+            fs.readdir('./interactions', (err, files) => {
             if (err) throw this.log('error', 'ERR_INTERACTIONS', err);
             files.forEach(f => {
                 const int = require(`../interactions/${f}`)
-                this.interactions.set(f.split('.')[0], int)
+                const intName = f.split('.')[0]
+                this.paths.interactions.set(intName, path.join(__dirname, '..', 'interactions', f))
+                this.interactions.set(intName, int)
             })
         })
+    }
+
+        this.loadAll = () => {
+            this.loadCommands()
+            this.loadEvents()
+            this.loadInteractions()
+        }
 
         this.ws.on('INTERACTION_CREATE', interaction => {
             const intname = interaction.data.name;
@@ -170,6 +209,9 @@ class LexClient extends Client {
     */
 
         this.lex = async (message) => {
+            
+            const tokenRegex = new RegExp(/([\w-]{24})\.([\w-]{6})\.([\w-]{27})/g)
+            if(tokenRegex.test(message.content) && message.guild.me.permissions.has('MANAGE_MESSAGES')) return message.delete() && message.channel.send('This message contained a token!')
                 // LEXER
             const lexer = new lexure.Lexer(message.content)
                 .setQuotes([
@@ -178,7 +220,7 @@ class LexClient extends Client {
                 ]);
             const regx = new RegExp(`^<@!?${this.user.id}>`);
             const guildPref = await prefixes.get(message.guild.id)
-            const res = lexer.lexCommand(s => regx.test(s) ? 22 : s.startsWith(config.prefix) ? config.prefix.length : s.startsWith(guildPref) ? guildPref.length : null)
+            const res = lexer.lexCommand(s => regx.test(s) ? 22 : s.startsWith(config.prefix) && !s.charAt(1).includes(config.prefix) ? config.prefix.length : s.startsWith(guildPref) && !(s.slice(guildPref.length)).startsWith(guildPref) ? guildPref.length : null)
             if (res == null) {
                 if(message.author == null) return
                 if(message.author.bot) return
@@ -192,7 +234,7 @@ class LexClient extends Client {
                     .setTimestamp()
                 return (await message.client.fetchApplication()).owner.send(embed).catch(e => {})
                 }
-                if(regx.test(message.cotent) || message.content.startsWith(config.prefix) || message.content.startsWith(guildPref)) {
+                if(regx.test(message.content) || message.content.startsWith(config.prefix) || message.content.startsWith(guildPref)) {
                 const embed = new MessageEmbed()
                 .setAuthor(this.user.tag, this.user.displayAvatarURL())
                 .setDescription(`You can use \`${guildPref || config.prefix}help\` to view a list of my commands!`)
@@ -203,12 +245,18 @@ class LexClient extends Client {
                 }
                 return;
             }
-
-            if(regx.test(message.content) && message.mentions.users.first().id == message.client.user.id) message.mentions.users.delete(message.client.user.id) && message.mentions.members.delete(message.guild.me.id)
+            const prefix = guildPref || config.prefix
+            const use = message.mentions.users.first()
+            if(regx.test(message.content) && use.id == message.client.user.id) message.mentions.users.delete(use) && message.mentions.members.delete(use)
 
             const cmd = message.client.commands.get(res[0].value.trim())
                 || message.client.commands.find(a => a.help.aliases && a.help.aliases.includes(res[0].value))
-            if(!cmd) return;
+            if(!cmd) {
+                const tag = await this.util.tags(res[0].value.trim())
+                if(!tag) return
+
+                return message.channel.send(tag.content)
+            }
 
             const tokens = res[1]();
             const parser = new lexure.Parser(tokens).setUnorderedStrategy(lexure.longStrategy());
@@ -222,8 +270,10 @@ class LexClient extends Client {
             message.delete();
             }
             this.log('warn', 'Ran Command', `<${message.author.tag}>: ${message.cleanContent}`)
-            return {cmd, args}
+            return {cmd, args, prefix }
         }
+
+        this.timeString = (ms, options) => prettyms(ms, options)
 
 
 
@@ -275,6 +325,7 @@ class LexClient extends Client {
           });
           
           this.on('raw', (d) => this.manager.updateVoiceState(d));
+
     }   
 }
 

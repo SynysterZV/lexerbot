@@ -3,7 +3,7 @@ module.exports = async (client, oldMember, newMember) => {
     if (newMember.partial) await newMember.fetch()
     if (oldMember.pending == true && newMember.pending == false) {
         const role = oldMember.guild.roles.cache.find(r => r.name == 'Members')
-        if(!oldMember.guild.me.permissions.has(['MANAGE_MEMBERS'])) return 
+        if(!oldMember.guild.me.permissions.has(['MANAGE_ROLES'])) return 
         newMember.roles.add(role)
     }
 

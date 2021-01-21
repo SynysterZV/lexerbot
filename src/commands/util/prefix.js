@@ -14,6 +14,10 @@ module.exports = {
 
         if(prefix) {
             if(!message.member.permissions.has('ADMINISTRATOR') && message.author.id != '372516983129767938') return message.reply('Youre not allowed to change the guild prefix') && message.client.log('error', 'NON_AUTH_PREFIX_CH', `${message.author.tag}: ${prefix}`)
+            if (prefix == 'reset') {
+                message.client.prefixes.set(message.guild.id, message.client.config.prefix)
+                return message.reply(`Prefix successfully reset to \`${message.client.config.prefix}\``)
+            }
             message.client.prefixes.set(message.guild.id, prefix)
             return message.reply(`Prefix successfully set to \`${prefix}\``)
         } else {

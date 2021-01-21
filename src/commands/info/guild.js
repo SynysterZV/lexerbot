@@ -13,7 +13,18 @@ module.exports = {
     },
     async execute(message, args) {
 
+        const n = args.flag('n', 'names')
+
         const createdAt = new Date(message.guild.createdAt).toDateString()
+
+        if(n) {
+            const embed = new MessageEmbed()
+                .setDescription(message.client.guilds.cache.map(g => `• ${g.name}`).join('\n'))
+                .setTitle('Guilds Im In!')
+                .setThumbnail(message.client.user.displayAvatarURL())
+
+            return message.channel.send(embed)
+        }
 
         const tc = message.guild.channels.cache.filter(c => c.type === 'text').size
         const vc = message.guild.channels.cache.filter(c => c.type === 'voice').size

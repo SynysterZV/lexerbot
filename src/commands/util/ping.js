@@ -10,10 +10,14 @@ module.exports = {
         role: false,
     },
     async execute (message, args) {
-        message.delete()
         message.channel.send('Loading..').then(m => {
             const ping = m.createdTimestamp - message.createdTimestamp
-            m.edit(`Pong! Latency is ${ping}ms`)
+            m.edit('', { 
+                embed: {
+                    title: 'Pong!',
+                    description: `Round-trip latency: ${ping}ms\nHeartbeat latency: ${message.client.ws.ping}ms`,
+                }
+            })
         })
     }
 }

@@ -22,7 +22,7 @@ const timeVal = t => {
 module.exports = {
     help: {
         name: 'mute',
-        description: 'Mute a user',
+        desc: 'Mute a user',
         aliases: [],
         category: 'mod',
         usage: '{ User } { Reason } <--t=1s|1m|1h|1d>'
@@ -42,6 +42,7 @@ module.exports = {
 
         const timevar = timeVal(time)
         if(!timevar || timevar > 1000 * 60 * 60 * 24 * 7) return message.reply('Please provide a valid time between 1 second and 7 days')
+        const timeString = message.client.timeString(timevar, { verbose: true} )
 
         const roles = member.roles.cache.map(r=>r.id)
         const mutedRole = message.guild.roles.cache.find(r => r.name === message.client.config.mutedRole)
@@ -51,7 +52,7 @@ module.exports = {
         member.roles.remove(roles).then(m => {
             m.roles.add(mutedRole)
             message.client.muted.set(m.id, roles)
-            message.client.emit('modEvent', 'MUTE', { member, reason, executor, time })
+            message.client.emit('modEvent', 'MUTE', { member, reason, executor, time: timeString })
 
             setTimeout(async () => {
                 if(!message.client.muted.has(m.id)) return
@@ -60,7 +61,7 @@ module.exports = {
                 m.roles.add(roles)
             }, timevar)
         })
-        return message.reply(`Successfully muted **${member.user.tag}** for **${reason}** (Time: ${time})`)
+        return message.reply(`Successfully muted **${member.user.tag}** for **${reason}** (Time: ${timeString})`)
     }
 
     

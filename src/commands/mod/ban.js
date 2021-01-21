@@ -14,7 +14,7 @@ module.exports = {
     },
     async execute(message, args) {
         const memberArg = args.single()
-        const member = message.mentions.users.first() || await message.guild.members.fetch(memberArg).catch(e =>{})
+        const member = message.mentions.members.first() || await message.guild.members.fetch(memberArg).catch(e =>{})
         if(!member) return message.reply('That user doesnt exist!')
 
         const days = args.option('days', 'd') || 0

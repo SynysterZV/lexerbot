@@ -9,10 +9,10 @@ module.exports = (client, member) => {
         .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL(), `https://discord.com/users/${member.user.id}`)
         .addFields(
             {
-                name: '**Created At:**', value: new Date(member.user.createdAt).toDateString(), inline: true,
+                name: '**Joined:**', value: new Date(member.joinedAt).toLocaleString(), inline: true,
             },
             {
-                name: '**Left:**', value: new Date(Date.now()).toLocaleString(), inline: true,
+                name: '**Left:**', value: `${new Date(Date.now()).toLocaleString()} EST`, inline: true,
             },
             {
                 name: '\u200b', value: '\u200b', inline: true,
@@ -25,7 +25,9 @@ module.exports = (client, member) => {
             }
         )
         .setFooter(member.guild.name, member.guild.iconURL())
+        .setTimestamp()
         .setThumbnail(member.user.displayAvatarURL({ size: 512 }))
         .setColor('RED')
+    client.log('error', 'MEMBER LEFT', member.user.tag)
     channel.send(embed)
 }
