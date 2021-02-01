@@ -1,18 +1,17 @@
 {
-    "keyring": {
-        "discord": "Discord Bot Token", 
-        "spotify": { 
-            "id": "Spotify Client ID", 
-            "secret": "Spotify Client Secret" 
-        },
-        "genius": "Genius API Token"
+  "keyring": {
+    "discord": "Discord Bot Token",
+    "spotify": {
+      "id": "Spotify Client ID",
+      "secret": "Spotify Client Secret"
     },
-    "prefix": ".",
-    "presence": {
-        "activity": {
-
-            "name": "with code"
-        },
-        "status": "dnd"
-    }
+    "genius": "Genius API Token"
+  },
+  "prefix": ".",
+  "presence": {
+    "activity": {
+      "name": "with code"
+    },
+    "status": "dnd"
+  }
 }

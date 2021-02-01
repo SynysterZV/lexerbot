@@ -1,21 +1,20 @@
-const Lexer = require('./structures')
-const DiscordRPC = require('discord-rpc')
-const fetch = require('node-fetch')
+const Lexer = require("./structures");
+const DiscordRPC = require("discord-rpc");
+const fetch = require("node-fetch");
 
-const client = new Lexer(require('./client/config.json'));
+const client = new Lexer(require("./client/config.json"));
+// require("../server/server");
 
-client.loadAll()
+client.loadAll();
 
-process.on('unhandledRejection', e => {
-    client.log('error', 'Unhandled Rejection', e)
-})
+process.on("unhandledRejection", (e) => {
+  client.log("error", "Unhandled Rejection", e);
+});
 
+client.login();
 
-client.login()
-
-const clientId = '794917013306081331';
-const rpc = new DiscordRPC.Client({ transport: 'ipc' });
-
+const clientId = "794917013306081331";
+const rpc = new DiscordRPC.Client({ transport: "ipc" });
 
 async function setActivity() {
   if (!rpc) {
@@ -24,16 +23,19 @@ async function setActivity() {
   rpc.setActivity({
     details: `Used in`,
     state: `${client.guilds.cache.size} servers!`,
-    largeImageKey: 'snek_small',
-    largeImageText: 'BOII',
-    buttons: [{ label: 'Invite Me!', url: 'https://synyster.page.link/Eit5'}, { label: 'Join my server!', url: 'http://gg.synyster.org'}],
+    largeImageKey: "snek_small",
+    largeImageText: "BOII",
+    buttons: [
+      { label: "Invite Me!", url: "https://synyster.page.link/Eit5" },
+      { label: "Join my server!", url: "http://gg.synyster.org" },
+    ],
     instance: false,
   });
 }
 
-rpc.on('ready', () => {
+rpc.on("ready", () => {
   setActivity();
-  client.log('success', 'RPC', 'CONNECTED!')
+  client.log("success", "RPC", "CONNECTED!");
 
   // activity can only be set every 15 seconds
   setInterval(() => {
@@ -41,5 +43,7 @@ rpc.on('ready', () => {
   }, 15e3);
 });
 
-client.rpc = rpc
-rpc.login({ clientId }).catch(e => { client.log('error', 'RPC_ERR', e) });
+client.rpc = rpc;
+rpc.login({ clientId }).catch((e) => {
+  client.log("error", "RPC_ERR", e);
+});
