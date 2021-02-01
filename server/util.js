@@ -1,6 +1,7 @@
 const fetch = require('node-fetch')
 const path = require('path')
 const constants = require('./constants')
+const config = require('./config.json')
 
 module.exports = {
 
@@ -105,8 +106,8 @@ module.exports = {
 
     exchange_code: async (code) => {
         const data = {
-            client_id: '794917013306081331',
-            client_secret: 'kIEVgLGRotQRIM_oIT11JwnZVSWDrP6v',
+            client_id: config.client.id,
+            client_secret: config.client.secret,
             grant_type: 'authorization_code',
             redirect_uri: 'http://localhost/callback',
             code,
